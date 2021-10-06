@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_course_autumn_2021/first_page.dart';
 import 'package:flutter_course_autumn_2021/third_page.dart';
 
 class SecondPage extends StatelessWidget {
@@ -18,46 +19,44 @@ class SecondPage extends StatelessWidget {
       appBar: AppBar(),
       body: Column(
         children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                MyWidget(
-                  content: 'dfsa',
-                  title: 'sfd',
-                ),
-                MyWidget(
-                  content: 'dfsa',
-                  title: 'sfd',
-                ),
-                MyWidget(
-                  content: 'dfsa',
-                  title: 'sfd',
-                ),
-                MyWidget(
-                  content: 'dfsa',
-                  title: 'sfd',
-                ),
-                MyWidget(
-                  content: 'dfsa',
-                  title: 'sfd',
-                ),
-              ],
+          Hero(
+            tag: 'element',
+            child: Container(
+              width: 400,
+              height: 100,
+              color: Colors.red,
             ),
           ),
-          Image.asset(
-            'images/pic.png',
-
-            // fit: BoxFit.fill,
-          ),
-          Padding(
-            padding: EdgeInsets.all(4),
-          ),
-          Image.network(
-            'https://th.bing.com/th/id/R.69ca7ec7e0b6760c682518ace9a128bd?rik=LLLusmA0%2fmPI3Q&riu=http%3a%2f%2fwww.pixelstalk.net%2fwp-content%2fuploads%2f2016%2f05%2fPhotos-Download-Awesome-Wallpapers-HD.jpg&ehk=DbJOem320WxeyLt9NuEMvfGscpwXyEpmM87npdCJPTk%3d&risl=&pid=ImgRaw&r=0',
+          Container(
+            padding: EdgeInsets.all(16),
+            alignment: Alignment.center,
+            child: FutureBuilder(
+              future: futureInt(),
+              builder: (ctxt, asyncData) {
+                if (!asyncData.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                } else {
+                  return Center(
+                    child: Container(
+                      child: Text('${asyncData.data}'),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+Future<int> futureInt() {
+  return Future.delayed(
+    Duration(seconds: 3),
+    () async {
+      int a = await Random().nextInt(10);
+      return a;
+    },
+  );
 }
