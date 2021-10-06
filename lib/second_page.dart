@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course_autumn_2021/first_page.dart';
+import 'package:flutter_course_autumn_2021/third_page.dart';
 
 class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ThirdPage(),
+            ),
+          );
+        },
+      ),
       appBar: AppBar(),
       body: Column(
         children: [

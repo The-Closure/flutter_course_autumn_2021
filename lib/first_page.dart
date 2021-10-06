@@ -88,6 +88,10 @@ class MyWidget extends StatelessWidget {
             width: 200,
             height: 100,
             decoration: BoxDecoration(
+              image: DecorationImage(
+                // fit: BoxFit.fitHeight,
+                image: AssetImage('images/pic.png'),
+              ),
               border: Border.all(
                 color: Colors.black,
                 width: 4,
