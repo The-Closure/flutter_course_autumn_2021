@@ -5,7 +5,7 @@ class MagicWidget extends StatelessWidget {
   MagicWidget(
     this.direction,
     this.children, {
-    Key? key,
+    Key key,
   }) : super(key: key);
   MagicDirection direction;
   List<Widget> children;
