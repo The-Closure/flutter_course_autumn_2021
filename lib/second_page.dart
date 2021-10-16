@@ -1,62 +1,31 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_course_autumn_2021/third_page.dart';
 
 class SecondPage extends StatelessWidget {
+  String email;
+  String password;
+  SecondPage({Key key, @required this.email, @required this.password})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    Map userInfo = RouteSettings(name: 'userInfo').arguments;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => ThirdPage(),
-            ),
-          );
-        },
-      ),
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Hero(
-            tag: 'element',
-            child: Container(
-              width: 400,
-              height: 100,
-              color: Colors.red,
+      body: Padding(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('$email'),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.all(16),
-            alignment: Alignment.center,
-            child: FutureBuilder(
-              future: futureInt(),
-              builder: (ctxt, asyncData) {
-                if (!asyncData.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                } else {
-                  return Center(
-                    child: Container(
-                      child: Text('${asyncData.data}'),
-                    ),
-                  );
-                }
-              },
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('$password'),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-}
-
-Future<int> futureInt() {
-  return Future.delayed(
-    Duration(seconds: 3),
-    () async {
-      int a = await Random().nextInt(10);
-      return a;
-    },
-  );
 }
