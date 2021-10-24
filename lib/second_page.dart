@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class SecondPage extends StatelessWidget {
   String email;
   String password;
-  SecondPage({Key key, @required this.email, @required this.password})
-      : super(key: key);
+  SecondPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Map<String, String> info = ModalRoute.of(context).settings.arguments as Map;
     Map userInfo = RouteSettings(name: 'userInfo').arguments;
     return Scaffold(
       appBar: AppBar(),
@@ -17,11 +17,20 @@ class SecondPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('$email'),
+              child: Text('${info['email']}'),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('$password'),
+              child: Text('${info['password']}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pop({'returnedData': 'second_page_pop'});
+                  },
+                  child: Text('back')),
             ),
           ],
         ),
