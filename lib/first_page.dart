@@ -11,6 +11,7 @@ class _FirstPageState extends State<FirstPage> {
   String title;
 
   int _selectedDestination = 0;
+  List<Object> list = [1, 2, "test"];
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,7 @@ class _FirstPageState extends State<FirstPage> {
         ),
       ),
       appBar: AppBar(
-        title: Text('data'),
+        title: Text('datda'),
         leading: Icon(Icons.menu),
         actions: [
           Icon(Icons.favorite),
