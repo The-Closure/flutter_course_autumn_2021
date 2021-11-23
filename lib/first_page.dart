@@ -1,105 +1,135 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FirstPage extends StatefulWidget {
   FirstPage({Key key}) : super(key: key);
-
   @override
   State<FirstPage> createState() => _FirstPageState();
 }
 
 class _FirstPageState extends State<FirstPage> {
-  String title;
-
-  int _selectedDestination = 0;
-  List<Object> list = [1, 2, "test"];
+  List<bool> checkboxes = [false, false, false];
+  int _groupRadio = -1;
+  bool _switch = false;
+  double _slider = 10;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: Container(
-          width: double.infinity,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              UserAccountsDrawerHeader(
-                accountName: Text('username'),
-                accountEmail: Text('email'),
+    return DefaultTabController(
+      initialIndex: 3,
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('hello tab bar'),
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                text: 'checkbox',
+                icon: Icon(Icons.add_to_drive_sharp),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Header',
-                ),
+              Tab(
+                text: 'radio',
+                icon: Icon(Icons.airline_seat_recline_extra),
               ),
-              Divider(
-                height: 1,
-                thickness: 1,
+              Tab(
+                text: 'switch',
+                icon: Icon(Icons.web_asset_sharp),
               ),
-              ListTile(
-                leading: Icon(Icons.favorite),
-                title: Text('Item 1'),
-                selected: _selectedDestination == 0,
-                onTap: () => selectDestination(0),
-              ),
-              ListTile(
-                leading: Icon(Icons.delete),
-                title: Text('Item 2'),
-                selected: _selectedDestination == 1,
-                onTap: () => selectDestination(1),
-              ),
-              ListTile(
-                leading: Icon(Icons.label),
-                title: Text('Item 3'),
-                selected: _selectedDestination == 2,
-                onTap: () => selectDestination(2),
-              ),
-              Divider(
-                height: 1,
-                thickness: 1,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Label',
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.bookmark),
-                title: Text('Item A'),
-                selected: _selectedDestination == 3,
-                onTap: () => selectDestination(3),
+              Tab(
+                text: 'slider',
+                icon: Icon(Icons.control_point),
               ),
             ],
           ),
         ),
-      ),
-      appBar: AppBar(
-        title: Text('datda'),
-        leading: Icon(Icons.menu),
-        actions: [
-          Icon(Icons.favorite),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Icon(Icons.search),
-          ),
-          Icon(Icons.more_vert),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xff03dac6),
-        foregroundColor: Colors.black,
-        onPressed: () {
-          // Respond to button press
-        },
-        child: Icon(Icons.add),
+        body: TabBarView(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  for (int i = 0; i < checkboxes.length; i++)
+                    CheckboxListTile(
+                      title: Text('data'),
+                      tristate: i == 0,
+                      onChanged: (value) {
+                        print(value);
+                        setState(() {
+                          checkboxes[i] = value;
+                        });
+                      },
+                      value: checkboxes[i],
+                      activeColor: Color(0xFF6200EE),
+                    ),
+                ],
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  for (var i = 0; i < 5; i++)
+                    RadioListTile(
+                      title: Text('data'),
+                      value: i,
+                      groupValue: _groupRadio,
+                      onChanged: (value) {
+                        setState(() {
+                          _groupRadio = value;
+                        });
+                      },
+                      activeColor: Color(0xFF6200EE),
+                    ),
+                ],
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Switch(
+                value: _switch,
+                activeColor: Color(0xFF6200EE),
+                onChanged: (value) {
+                  setState(() {
+                    _switch = value;
+                  });
+                },
+              ),
+            ),
+            Container(
+              // width: 100,
+              alignment: Alignment.center,
+              child: Slider(
+                value: _slider,
+                min: 0,
+                max: 100,
+                label: _slider.round().toString(),
+                divisions: 10,
+                onChanged: (value) {
+                  if (value == 50) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        action: SnackBarAction(
+                          label: 'hide',
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          },
+                        ),
+                        content: Text(
+                          'half slider',
+                        ),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  setState(() {
+                    _slider = value;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
-  }
-
-  void selectDestination(int index) {
-    setState(() {
-      _selectedDestination = index;
-    });
   }
 }
