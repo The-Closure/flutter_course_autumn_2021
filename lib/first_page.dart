@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class FirstPage extends StatefulWidget {
   FirstPage({Key key}) : super(key: key);
@@ -8,170 +9,75 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> {
-  List<bool> checkboxes = [false, false, false];
-  int _groupRadio = -1;
-  bool _switch = false;
-  double _slider = 10;
-  String title = 'date value';
-
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      initialIndex: 3,
-      length: 4,
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.date_range),
-          onPressed: () async {
-            final date = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1990, 1),
-                lastDate: DateTime(2030, 1));
-            print(date);
-            setState(() {
-              title =
-                  '${date.year.toString()}-${date.month.toString()}-${date.day.toString()}';
-            });
-          },
-        ),
-        appBar: AppBar(
-          title: Text('$title'),
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                text: 'checkbox',
-                icon: Icon(Icons.add_to_drive_sharp),
-              ),
-              Tab(
-                text: 'radio',
-                icon: Icon(Icons.airline_seat_recline_extra),
-              ),
-              Tab(
-                text: 'switch',
-                icon: Icon(Icons.web_asset_sharp),
-              ),
-              Tab(
-                text: 'slider',
-                icon: Icon(Icons.control_point),
-              ),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  for (int i = 0; i < checkboxes.length; i++)
-                    CheckboxListTile(
-                      title: Text('data'),
-                      tristate: i == 0,
-                      onChanged: (value) {
-                        print(value);
-                        setState(() {
-                          checkboxes[i] = value;
-                        });
-                      },
-                      value: checkboxes[i],
-                      activeColor: Color(0xFF6200EE),
-                    ),
-                ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('card'),
+      ),
+      body: ListView.builder(
+        itemCount: 2,
+        itemBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30), // if you need this
+              side: BorderSide(
+                color: Colors.grey.withOpacity(0.2),
+                width: 1,
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  for (var i = 0; i < 5; i++)
-                    Column(
-                      children: [
-                        RadioListTile(
-                          title: Text('data'),
-                          value: i,
-                          groupValue: _groupRadio,
-                          onChanged: (value) {
-                            setState(() {
-                              _groupRadio = value;
-                            });
-                          },
-                          activeColor: Color(0xFF6200EE),
-                        ),
-                        Divider(
-                          color: Colors.grey,
-                          indent: 5,
-                          endIndent: 5,
-                          thickness: 2,
-                          height: 10,
-                        )
-                      ],
-                    ),
-                ],
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: Switch(
-                value: _switch,
-                activeColor: Color(0xFF6200EE),
-                onChanged: (value) {
-                  setState(() {
-                    _switch = value;
-                  });
-                },
-              ),
-            ),
-            Container(
-              // width: 100,
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Slider(
-                      value: _slider,
-                      min: 0,
-                      max: 100,
-                      label: _slider.round().toString(),
-                      divisions: 10,
-                      onChanged: (value) {
-                        if (value == 50) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              action: SnackBarAction(
-                                label: 'hide',
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                },
-                              ),
-                              content: Text(
-                                'half slider',
-                              ),
-                              duration: Duration(seconds: 3),
-                            ),
-                          );
-                        }
-                        setState(() {
-                          _slider = value;
-                        });
-                      },
-                    ),
+            elevation: null, // has value when shape is null
+            shadowColor: Colors.black,
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.arrow_drop_down_circle),
+                  title: const Text('Card title 1'),
+                  subtitle: Text(
+                    'Secondary Text',
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
-                  Expanded(
-                      flex: 5,
-                      child: ListView.builder(
-                        itemCount: _slider.toInt(),
-                        itemBuilder: (context, index) => ListTile(
-                          leading: Icon(Icons.home),
-                          title: Text('home'),
-                        ),
-                      ))
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  ),
+                ),
+                ButtonBar(
+                  alignment: MainAxisAlignment.start,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent)),
+                      onPressed: () {
+                        // Perform some action
+                      },
+                      child: const Text('ACTION 1'),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent)),
+                      onPressed: () {
+                        // Perform some action
+                      },
+                      child: const Text('ACTION 2'),
+                    ),
+                  ],
+                ),
+                Image.network(
+                  'https://www.pixsy.com/wp-content/uploads/2021/04/ben-sweet-2LowviVHZ-E-unsplash-1.jpeg',
+                  width: double.infinity,
+                  height: 300,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
