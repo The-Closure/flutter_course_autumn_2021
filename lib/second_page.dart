@@ -49,7 +49,10 @@ class _SecondPageState extends State<SecondPage> {
                         chips.add(chipValue);
                       });
                     },
-                    child: Text('add'),
+                    child: Text(
+                      'add',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                   ),
                 ),
               ],
@@ -82,39 +85,88 @@ class _SecondPageState extends State<SecondPage> {
                     });
                   },
                 ),
-                ChoiceChip(
-                  label: Text('Choice 2'),
-                  selected: choices[1],
-                  onSelected: (value) {
-                    choices.fillRange(0, choices.length, false);
-
-                    setState(() {
-                      choices[1] = value;
-                    });
-                  },
-                ),
-                ChoiceChip(
-                  label: Text('Choice 3'),
-                  selected: choices[2],
-                  onSelected: (value) {
-                    choices.fillRange(0, choices.length, false);
-
-                    setState(() {
-                      choices[2] = value;
-                    });
-                  },
-                ),
-                ChoiceChip(
-                  label: Text('Choice 4'),
-                  selected: choices[3],
-                  onSelected: (value) {
-                    choices.fillRange(0, choices.length, false);
-
-                    setState(() {
-                      choices[3] = value;
-                    });
-                  },
-                ),
+                Builder(builder: (context) {
+                  return ChoiceChip(
+                    label: Text('Choice 2'),
+                    selected: choices[1],
+                    onSelected: (value) {
+                      choices.fillRange(0, choices.length, false);
+                      showDialog(
+                          context: context,
+                          builder: (ctxt) {
+                            return CupertinoApp(
+                              home: Scaffold(
+                                body: Center(
+                                  child: Text(
+                                    'Choice 3',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                      setState(() {
+                        choices[1] = value;
+                      });
+                    },
+                  );
+                }),
+                Builder(builder: (context) {
+                  return Hero(
+                    tag: 'chip',
+                    child: ChoiceChip(
+                      label: Text('Choice 3'),
+                      selected: choices[2],
+                      onSelected: (value) {
+                        choices.fillRange(0, choices.length, false);
+                        Scaffold.of(context).showBottomSheet((ctxt) {
+                          return Scaffold(
+                            appBar: AppBar(),
+                            body: Center(
+                              child: Hero(
+                                tag: 'chip',
+                                child: Text(
+                                  'Choice 3',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                        setState(() {
+                          choices[2] = value;
+                        });
+                      },
+                    ),
+                  );
+                }),
+                Builder(builder: (context) {
+                  return ChoiceChip(
+                    label: Text('Choice 4'),
+                    selected: choices[3],
+                    onSelected: (value) {
+                      choices.fillRange(0, choices.length, false);
+                      showDialog(
+                          context: context,
+                          builder: (ctxt) {
+                            return AlertDialog(
+                              actions: [TextButton(onPressed: (){}, child: Text('data'))],
+                              content: Container(
+                                child: Center(
+                                  child: Text(
+                                    'Choice 4',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                      setState(() {
+                        choices[3] = value;
+                      });
+                    },
+                  );
+                }),
               ],
             ),
           )
