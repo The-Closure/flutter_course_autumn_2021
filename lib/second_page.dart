@@ -1,24 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_course_autumn_2021/models/ArticlesResponse.dart';
+import 'package:flutter_course_autumn_2021/service/DataService.dart';
 
 class SecondPage extends StatefulWidget {
   SecondPage({Key key}) : super(key: key);
-
+  int a;
   @override
   State<SecondPage> createState() => _SecondPageState();
 }
 
-/**
-   * 
-   *  [filterChip accepts multi choices] coding feature
-   * [choiceChip accepts single choice] coding feature
-   * 
-   */
-
 class _SecondPageState extends State<SecondPage> {
-  List<String> chips = List.empty(growable: true);
-  List<bool> choices = [false, false, false, false];
-  TextEditingController chipInput = TextEditingController();
+  ArticlesResponse articlesResponse;
+  DataService dataService = DataService();
+  @override
+  void initState() {
+    dataService.fetchData().then((value) {
+      setState(() {
+        articlesResponse = value;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,146 +33,34 @@ class _SecondPageState extends State<SecondPage> {
       body: Column(
         children: [
           Expanded(
-            flex: 1,
-            child: Row(
-              children: [
-                Container(
-                  width: 200,
-                  child: TextFormField(
-                    controller: chipInput,
-                  ),
-                ),
-                Container(
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      String chipValue = chipInput.text;
-                      chipInput.clear();
-                      setState(() {
-                        chips.add(chipValue);
-                      });
-                    },
-                    child: Text(
-                      'add',
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 6,
-            child: ListView.builder(
-              itemCount: chips.length,
-              itemBuilder: (context, index) => InputChip(
-                label: Text(
-                  chips[index],
-                ),
-                onSelected: (bool value) {},
+            flex: 0,
+            child: Container(
+              height: 100,
+              child: ElevatedButton(
+                onPressed: () async {
+                  articlesResponse = await dataService.fetchData();
+                  setState(() {
+                    articlesResponse = articlesResponse;
+                  });
+                },
+                child: Text('fetch data'),
               ),
             ),
           ),
-          Expanded(
-            flex: 6,
-            child: Column(
-              children: [
-                ChoiceChip(
-                  label: Text('Choice 1'),
-                  selected: choices[0],
-                  onSelected: (value) {
-                    choices.fillRange(0, choices.length, false);
-
-                    setState(() {
-                      choices[0] = value;
-                    });
-                  },
-                ),
-                Builder(builder: (context) {
-                  return ChoiceChip(
-                    label: Text('Choice 2'),
-                    selected: choices[1],
-                    onSelected: (value) {
-                      choices.fillRange(0, choices.length, false);
-                      showDialog(
-                          context: context,
-                          builder: (ctxt) {
-                            return CupertinoApp(
-                              home: Scaffold(
-                                body: Center(
-                                  child: Text(
-                                    'Choice 3',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-                      setState(() {
-                        choices[1] = value;
-                      });
-                    },
-                  );
-                }),
-                Builder(builder: (context) {
-                  return Hero(
-                    tag: 'chip',
-                    child: ChoiceChip(
-                      label: Text('Choice 3'),
-                      selected: choices[2],
-                      onSelected: (value) {
-                        choices.fillRange(0, choices.length, false);
-                        Scaffold.of(context).showBottomSheet((ctxt) {
-                          return Scaffold(
-                            appBar: AppBar(),
-                            body: Center(
-                              child: Hero(
-                                tag: 'chip',
-                                child: Text(
-                                  'Choice 3',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ),
-                          );
-                        });
-                        setState(() {
-                          choices[2] = value;
-                        });
-                      },
+          articlesResponse == null
+              ? CircularProgressIndicator()
+              : Expanded(
+                  flex: 6,
+                  child: ListView.builder(
+                    itemCount: articlesResponse.article?.length ?? 0,
+                    itemBuilder: (context, index) => Center(
+                      child: Text(
+                        '${articlesResponse.article[index].title}',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                      ),
                     ),
-                  );
-                }),
-                Builder(builder: (context) {
-                  return ChoiceChip(
-                    label: Text('Choice 4'),
-                    selected: choices[3],
-                    onSelected: (value) {
-                      choices.fillRange(0, choices.length, false);
-                      showDialog(
-                          context: context,
-                          builder: (ctxt) {
-                            return AlertDialog(
-                              actions: [TextButton(onPressed: (){}, child: Text('data'))],
-                              content: Container(
-                                child: Center(
-                                  child: Text(
-                                    'Choice 4',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-                      setState(() {
-                        choices[3] = value;
-                      });
-                    },
-                  );
-                }),
-              ],
-            ),
-          )
+                  ),
+                ),
         ],
       ),
     );

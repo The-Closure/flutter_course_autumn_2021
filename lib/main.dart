@@ -11,20 +11,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp  (
+    return MaterialApp(
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
-      darkTheme: lightTheme().copyWith(textTheme: TextTheme(headline1: TextStyle( fontSize: 14))),
+      darkTheme: lightTheme().copyWith(
+        textTheme: TextTheme(
+          headline1: TextStyle(fontSize: 14),
+        ),
+      ),
       home: SecondPage(),
     );
   }
 
   ThemeData lightTheme() {
-    return ThemeData(primarySwatch: Colors.indigo,).copyWith(
-      textTheme: TextTheme(headline1: TextStyle(fontSize: 32,color: Colors.indigo)),
+    return ThemeData(
+      primarySwatch: Colors.indigo,
+    ).copyWith(
+      textTheme:
+          TextTheme(headline1: TextStyle(fontSize: 32, color: Colors.indigo)),
       chipTheme: ChipThemeData(
-        padding: EdgeInsets.all(0),
+          padding: EdgeInsets.all(0),
           backgroundColor: Colors.indigo.shade400,
           disabledColor: Colors.white,
           selectedColor: Colors.indigo,
@@ -32,11 +39,12 @@ class MyApp extends StatelessWidget {
           labelStyle: TextStyle(fontSize: 16),
           secondaryLabelStyle: TextStyle(fontSize: 14),
           brightness: Brightness.light),
-      
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-            textStyle: MaterialStateProperty.all(TextStyle(fontSize: 10)),
-            backgroundColor: MaterialStateProperty.all(Colors.indigo),
-      ),),);
+          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 10)),
+          backgroundColor: MaterialStateProperty.all(Colors.indigo),
+        ),
+      ),
+    );
   }
 }
