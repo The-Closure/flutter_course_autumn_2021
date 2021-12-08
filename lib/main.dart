@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_course_autumn_2021/controller/ArticlesController.dart';
+import 'package:flutter_course_autumn_2021/first_page.dart';
 import 'package:flutter_course_autumn_2021/second_page.dart';
+import 'package:flutter_course_autumn_2021/util/ControllersBinding.dart';
+import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 main() {
   runApp(MyApp());
@@ -11,7 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      initialBinding: ControllersBinding(),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
@@ -20,7 +26,7 @@ class MyApp extends StatelessWidget {
           headline1: TextStyle(fontSize: 14),
         ),
       ),
-      home: SecondPage(),
+      home: FirstPage(),
     );
   }
 
