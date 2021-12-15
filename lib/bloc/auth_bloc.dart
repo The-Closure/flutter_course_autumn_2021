@@ -9,7 +9,6 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial());
   final authService = AuthService();
-  @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     yield AuthInitial();
     if (event is SignInEvent) {
