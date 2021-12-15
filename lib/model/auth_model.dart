@@ -1,27 +1,28 @@
-class User {
-  int id;
-  String email;
-  String password;
-  String token;
-  String img;
+class AuthModel {
+  String? password;
+  bool? rememberMe;
+  String? username;
+  String? token;
 
-  User({this.id, this.email, this.password, this.token, this.img});
+  AuthModel(
+      {required this.password,
+      required this.rememberMe,
+      required this.username,
+      this.token});
 
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    email = json['email'];
+  AuthModel.fromJson(Map<String, dynamic> json) {
     password = json['password'];
+    rememberMe = json['rememberMe'];
+    username = json['username'];
     token = json['token'];
-    img = json['img'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['email'] = this.email;
     data['password'] = this.password;
+    data['rememberMe'] = this.rememberMe;
+    data['username'] = this.username;
     data['token'] = this.token;
-    data['img'] = this.img;
     return data;
   }
 }

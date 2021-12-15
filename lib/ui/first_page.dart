@@ -1,70 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_course_autumn_2021/bloc/auth_bloc.dart';
+import 'package:flutter_course_autumn_2021/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter_course_autumn_2021/model/auth_model.dart';
-import 'package:flutter_course_autumn_2021/ui/profile_page.dart';
+import 'package:flutter_course_autumn_2021/ui/locations_page.dart';
 
 class FirstPage extends StatelessWidget {
-  FirstPage({Key key}) : super(key: key);
+  FirstPage({Key? key}) : super(key: key);
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is SuccessedSignInState) {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => ProfilePage()));
-            }
-          },
-          listenWhen: (previous, current) => current is SuccessedSignInState,
-          child: BlocBuilder<AuthBloc, AuthState>(
+        appBar: AppBar(),
+        body: Container(
+          child: BlocConsumer<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state is SuccessedSignInState)
+                Navigator.of(context).popAndPushNamed('/locations_page');
+              else if (state is FaildAuthState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Faild Authentication')));
+              }
+            },
             builder: (context, state) {
-              if (state is AuthInitial) {
+              if (state is AuthInitial)
                 return SignInForm(
                     emailController: emailController,
                     passwordController: passwordController);
-              } else if (state is ProcessingSignInState) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is WrongEmailState) {
+              else if (state is ProcessingSignInState)
+                return CircularProgressIndicator();
+              else if (state is FaildAuthState)
                 return SignInForm(
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  errorEmail: state.errorMessage,
-                );
-              } else if (state is WrongPasswordState) {
-                return SignInForm(
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  errorPassword: state.errorMessage,
-                );
-              } else
-                return Text('data');
+                    emailController: emailController,
+                    passwordController: passwordController);
+              else
+                return Text('something went wrong');
             },
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
 class SignInForm extends StatelessWidget {
   SignInForm({
-    Key key,
-    @required this.emailController,
-    @required this.passwordController,
-    this.errorEmail,
-    this.errorPassword,
+    Key? key,
+    required this.emailController,
+    required this.passwordController,
   }) : super(key: key);
 
-  String errorEmail;
-  String errorPassword;
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
@@ -74,41 +58,29 @@ class SignInForm extends StatelessWidget {
       children: [
         TextField(
           style: TextStyle(color: Colors.black),
-          decoration: errorEmail != null
-              ? InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                )
-              : InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 2.0),
-                  ),
-                ),
+          decoration: InputDecoration(
+            enabledBorder: const OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.black, width: 2.0),
+            ),
+          ),
           controller: emailController,
         ),
         TextField(
           obscureText: true,
           style: TextStyle(color: Colors.black),
-          decoration: errorPassword != null
-              ? InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                )
-              : InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 2.0),
-                  ),
-                ),
+          decoration: InputDecoration(
+            enabledBorder: const OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.black, width: 2.0),
+            ),
+          ),
           controller: passwordController,
         ),
         ElevatedButton(
           onPressed: () {
-            final user = User(
-                email: emailController.text, password: passwordController.text);
+            final user = AuthModel(
+                rememberMe: true,
+                username: emailController.text,
+                password: passwordController.text);
             BlocProvider.of<AuthBloc>(context).add(SignInEvent(user: user));
           },
           child: Text('Sign In'),

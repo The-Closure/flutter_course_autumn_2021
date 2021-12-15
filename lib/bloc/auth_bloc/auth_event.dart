@@ -4,6 +4,6 @@ part of 'auth_bloc.dart';
 abstract class AuthEvent {}
 
 class SignInEvent extends AuthEvent {
-  User user;
-  SignInEvent({@required this.user});
+  AuthModel user;
+  SignInEvent({required this.user});
 }
