@@ -35,7 +35,10 @@ class FirstPage extends StatelessWidget {
                     emailController: emailController,
                     passwordController: passwordController);
               else
-                return Text('something went wrong');
+                return Text(
+                  'something went wrong',
+                  style: TextStyle(color: Colors.black),
+                );
             },
           ),
         ));

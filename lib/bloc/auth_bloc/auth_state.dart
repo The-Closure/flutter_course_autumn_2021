@@ -15,3 +15,7 @@ class SuccessedSignInState extends AuthState {
 }
 
 class NoConnectionState extends AuthState {}
+
+class ProcessingLogOutState extends AuthState {}
+
+class LogOutState extends AuthState {}

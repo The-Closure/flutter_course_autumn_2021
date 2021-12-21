@@ -5,6 +5,7 @@ import 'package:flutter_course_autumn_2021/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter_course_autumn_2021/bloc/locations_bloc/locations_bloc.dart';
 import 'package:flutter_course_autumn_2021/ui/first_page.dart';
 import 'package:flutter_course_autumn_2021/ui/locations_page.dart';
+import 'package:flutter_course_autumn_2021/ui/splash_paege.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 main() async {
@@ -50,16 +51,37 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        routes: {'/locations_page': (ctxt) => LocationsPage()},
-        themeMode: ThemeMode.dark,
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme(),
-        darkTheme: lightTheme().copyWith(
-          textTheme: TextTheme(
-            headline1: TextStyle(fontSize: 14),
-          ),
+      routes: {
+        '/locations_page': (ctxt) => LocationsPage(),
+        '/first_page': (ctxt) => FirstPage()
+      },
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme(),
+      darkTheme: lightTheme().copyWith(
+        textTheme: TextTheme(
+          headline1: TextStyle(fontSize: 14),
         ),
-        home: token == 'EMPTY_TOKEN' ? FirstPage() : LocationsPage());
+      ),
+      home: FutureBuilder(
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.toString() == 'EMPTY_TOKEN')
+              return FirstPage();
+            else
+              return LocationsPage();
+          } else {
+            return SplashPage();
+          }
+        },
+        future: tokenCall(),
+      ),
+    );
+  }
+
+  Future<String> tokenCall() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString('backend_token') ?? 'EMPTY_TOKEN';
   }
 
   ThemeData lightTheme() {
@@ -88,3 +110,5 @@ class MainApp extends StatelessWidget {
     );
   }
 }
+
+const sharedToken = 'backend_token';

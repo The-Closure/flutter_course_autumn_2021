@@ -8,17 +8,28 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
-    on<SignInEvent>((event, emit) async {
-      emit(ProcessingSignInState());
-      AuthModel? user = await authService.authUser(event.user);
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      sharedPreferences.setString('backend_user', user.toString());
-      sharedPreferences.setString('backed_token', user?.token ?? 'EMPTY_TOKEN');
-      user == null
-          ? emit(FaildAuthState())
-          : emit(SuccessedSignInState(user: user));
-    });
+    on<SignInEvent>(SignInEventHandler);
+    on<SignOutEvent>(SignOutEventHandler);
   }
-  final authService = AuthService();
 }
+
+final authService = AuthService();
+
+dynamic SignInEventHandler = (event, emit) async {
+  emit(ProcessingSignInState());
+  AuthModel? user = await authService.authUser(event.user);
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.setString('backend_user', user.toString());
+  sharedPreferences.setString('backend_token', user?.token ?? 'EMPTY_TOKEN');
+  user == null
+      ? emit(FaildAuthState())
+      : emit(SuccessedSignInState(user: user));
+};
+
+dynamic SignOutEventHandler = (event, emit) async {
+  emit(ProcessingLogOutState());
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.setString('backend_token', 'EMPTY_TOKEN');
+  emit(LogOutState());
+  emit(AuthInitial());
+};

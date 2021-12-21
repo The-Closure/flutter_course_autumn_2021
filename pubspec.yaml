@@ -27,6 +27,7 @@ dependencies:
   http: 
   connectivity: ^3.0.6
   fab_circular_menu: ^1.0.0
+  pull_to_refresh: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

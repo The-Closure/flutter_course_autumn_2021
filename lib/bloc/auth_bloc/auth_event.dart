@@ -7,3 +7,5 @@ class SignInEvent extends AuthEvent {
   AuthModel user;
   SignInEvent({required this.user});
 }
+
+class SignOutEvent extends AuthEvent {}
