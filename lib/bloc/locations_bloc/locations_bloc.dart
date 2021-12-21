@@ -19,7 +19,8 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
         // Map<String, dynamic> userDetails =
         //     jsonDecode(sharedPreferences.getString('backend_user') ?? '{}');
         List<LocationsModel> locations = await locationsService.getAllLocations(
-            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTYzOTY3NzczMX0.QYbKqtaUd0z5K2gDhC91REoWw14780hpqT_CXU2LamPg3i8mOfr_bTvVW5roUyWlHOkejgBgG6YOeDBspLldnQ',
+            (await SharedPreferences.getInstance()).getString('backed_token') ??
+                'EMPTY_TOKEN',
             page: event.page,
             size: event.size);
         emit(LocationsDataState(locations));

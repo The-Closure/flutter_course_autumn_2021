@@ -12,6 +12,7 @@ class AuthService {
         Uri.parse('${ServiceConfig.base_url}/api/authenticate'),
         body: jsonEncode(authModel),
         headers: {'content-type': 'application/json;encode=utf-8'});
+    http.Response res = response;
     if (response.statusCode == 200) {
       String? token =
           (jsonDecode(response.body) as Map<String, dynamic>)['id_token'];

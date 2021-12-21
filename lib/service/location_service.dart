@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 class LocationsService {
   Future<List<LocationsModel>> getAllLocations(String token,
       {int? page, int? size}) async {
+    if (token == 'EMPTY_TOKEN') throw Exception();
     http.Response response = await http.get(
         Uri.parse(
             '${ServiceConfig.base_url}/api/locations?page=$page&size=$size'),

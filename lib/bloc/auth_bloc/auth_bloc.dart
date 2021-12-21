@@ -11,13 +11,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignInEvent>((event, emit) async {
       emit(ProcessingSignInState());
       AuthModel? user = await authService.authUser(event.user);
-      user == null
-          ? emit(FaildAuthState())
-          : emit(SuccessedSignInState(user: user));
-
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       sharedPreferences.setString('backend_user', user.toString());
+      sharedPreferences.setString('backed_token', user?.token ?? 'EMPTY_TOKEN');
+      user == null
+          ? emit(FaildAuthState())
+          : emit(SuccessedSignInState(user: user));
     });
   }
   final authService = AuthService();
