@@ -28,7 +28,7 @@ dependencies:
   connectivity: ^3.0.6
   fab_circular_menu: ^1.0.0
   pull_to_refresh: ^2.0.0
-
+  
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -36,6 +36,9 @@ dependencies:
   bloc: ^8.0.1
   flutter_bloc: ^8.0.0
   shared_preferences: ^2.0.11
+  firebase_core: ^1.10.6
+  firebase_messaging: ^11.2.4
+  cloud_firestore: ^3.1.5
 
 dev_dependencies:
   flutter_test:

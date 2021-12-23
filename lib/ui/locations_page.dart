@@ -66,7 +66,7 @@ class LocationsPage extends StatelessWidget {
               },
               onRefresh: () {
                 BlocProvider.of<LocationsBloc>(context)
-                    .add(LoadLocationsEvent(page: 0, size: 10));
+                    .add(LoadLocationsEvent(page: 0, size: 4));
                 _refreshController.refreshCompleted();
               },
               child: ListView.builder(
