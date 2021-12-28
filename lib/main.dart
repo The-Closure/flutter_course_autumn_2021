@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_course_autumn_2021/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter_course_autumn_2021/bloc/locations_bloc/locations_bloc.dart';
 import 'package:flutter_course_autumn_2021/service/firestore_service.dart';
+import 'package:flutter_course_autumn_2021/ui/firestorage_page.dart';
 import 'package:flutter_course_autumn_2021/ui/firestore_first_page.dart';
 import 'package:flutter_course_autumn_2021/ui/firestore_locations_page%20copy.dart';
 import 'package:flutter_course_autumn_2021/ui/first_page.dart';
@@ -81,7 +82,7 @@ class MainApp extends StatelessWidget {
             headline1: TextStyle(fontSize: 14),
           ),
         ),
-        home: FireStoreUsersPage());
+        home: FireStoragePage());
   }
 
   Future<String> tokenCall() async {
