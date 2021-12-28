@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_course_autumn_2021/model/auth_model.dart';
 import 'package:flutter_course_autumn_2021/service/auth_service.dart';
 import 'package:meta/meta.dart';
