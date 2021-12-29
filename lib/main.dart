@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_course_autumn_2021/bloc/auth_bloc/auth_bloc.dart';
+import 'package:flutter_course_autumn_2021/bloc/local_bloc/local_bloc.dart';
 import 'package:flutter_course_autumn_2021/bloc/locations_bloc/locations_bloc.dart';
-import 'package:flutter_course_autumn_2021/service/firestore_service.dart';
-import 'package:flutter_course_autumn_2021/ui/firestorage_page.dart';
-import 'package:flutter_course_autumn_2021/ui/firestore_first_page.dart';
-import 'package:flutter_course_autumn_2021/ui/firestore_locations_page%20copy.dart';
-import 'package:flutter_course_autumn_2021/ui/first_page.dart';
-import 'package:flutter_course_autumn_2021/ui/locations_page.dart';
-import 'package:flutter_course_autumn_2021/ui/splash_paege.dart';
+import 'package:flutter_course_autumn_2021/gen_l10n/app_localizations.dart';
+import 'package:flutter_course_autumn_2021/ui/home.dart';
+import 'package:flutter_course_autumn_2021/ui/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Got a message whilst in the foreground!');
@@ -31,15 +31,17 @@ main() async {
 
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   String token = sharedPreferences.getString('backend_token') ?? 'EMPTY_TOKEN';
+  String local = sharedPreferences.getString('local') ?? 'en';
   runApp(MyApp(
     token: token,
+    local: local,
   ));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key, required String token}) : super(key: key);
-
-  String token = 'EMPTY_TOKEN';
+  MyApp({Key? key, required this.token, required this.local}) : super(key: key);
+  String local;
+  String token;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +53,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<LocationsBloc>(
           create: (_) => LocationsBloc(),
         ),
+        BlocProvider<LocalBloc>(
+          create: (context) => LocalBloc()..add(ChangeLocal(local)),
+        )
       ],
       child: MainApp(
         token: token,
@@ -69,20 +74,29 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        routes: {
-          '/locations_page': (ctxt) => LocationsPage(),
-          '/first_page': (ctxt) => FirstPage()
-        },
-        themeMode: ThemeMode.dark,
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme(),
-        darkTheme: lightTheme().copyWith(
-          textTheme: TextTheme(
-            headline1: TextStyle(fontSize: 14),
-          ),
-        ),
-        home: FireStoragePage());
+    return BlocBuilder<LocalBloc, LocalState>(
+      builder: (context, state) {
+        print(state.local);
+        return MaterialApp(
+            title: 'Localization example',
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              Locale('en', ''), // English, no country code
+              Locale('es', ''), // Spanish, no country code
+              Locale('ar', '')
+            ],
+            locale: Locale(state.local),
+            routes: {'/settings': (_) => SettingsPage()},
+            themeMode: ThemeMode.dark,
+            debugShowCheckedModeBanner: false,
+            home: HomePage());
+      },
+    );
   }
 
   Future<String> tokenCall() async {
