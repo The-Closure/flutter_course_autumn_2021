@@ -5,6 +5,7 @@ import 'package:flutter_course_autumn_2021/service/config.dart';
 import 'package:http/http.dart' as http;
 
 class LocationsService {
+  var i = 9;
   Future<List<LocationsModel>> getAllLocations(String token,
       {int? page, int? size}) async {
     if (token == 'EMPTY_TOKEN') throw Exception();

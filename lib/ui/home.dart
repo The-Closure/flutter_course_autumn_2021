@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_course_autumn_2021/bloc/locations_bloc/locations_bloc.dart';
 import 'package:flutter_course_autumn_2021/gen_l10n/app_localizations.dart';
+import 'package:flutter_course_autumn_2021/service/location_service.dart';
 import 'package:flutter_course_autumn_2021/ui/settings.dart';
 
 class HomePage extends StatelessWidget {
@@ -7,6 +10,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(RepositoryProvider.of<LocationsService>(context).i);
+    RepositoryProvider.of<LocationsService>(context).i++;
     return Scaffold(
       appBar: AppBar(),
       drawer: Drawer(

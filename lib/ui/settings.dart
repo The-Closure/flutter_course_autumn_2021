@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_course_autumn_2021/bloc/local_bloc/local_bloc.dart';
+import 'package:flutter_course_autumn_2021/service/location_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -20,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(RepositoryProvider.of<LocationsService>(context).i);
     return BlocBuilder<LocalBloc, LocalState>(
       builder: (context, state) {
         _local = state.local;

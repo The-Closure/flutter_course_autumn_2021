@@ -4,6 +4,7 @@ import 'package:flutter_course_autumn_2021/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter_course_autumn_2021/bloc/local_bloc/local_bloc.dart';
 import 'package:flutter_course_autumn_2021/bloc/locations_bloc/locations_bloc.dart';
 import 'package:flutter_course_autumn_2021/gen_l10n/app_localizations.dart';
+import 'package:flutter_course_autumn_2021/service/location_service.dart';
 import 'package:flutter_course_autumn_2021/ui/home.dart';
 import 'package:flutter_course_autumn_2021/ui/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,20 +46,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthBloc>(
-          create: (_) => AuthBloc(),
+    return RepositoryProvider(
+      create: (context) => LocationsService(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (_) => AuthBloc(),
+          ),
+          BlocProvider<LocationsBloc>(
+            create: (_) => LocationsBloc(),
+          ),
+          BlocProvider<LocalBloc>(
+            create: (context) => LocalBloc()..add(ChangeLocal(local)),
+          )
+        ],
+        child: MainApp(
+          token: token,
         ),
-        BlocProvider<LocationsBloc>(
-          create: (_) => LocationsBloc(),
-        ),
-        BlocProvider<LocalBloc>(
-          create: (context) => LocalBloc()..add(ChangeLocal(local)),
-        )
-      ],
-      child: MainApp(
-        token: token,
       ),
     );
   }
